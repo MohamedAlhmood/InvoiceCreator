@@ -2,6 +2,9 @@ import pandas as pd
 import glob
 from fpdf import FPDF
 from pathlib import Path
+
+from openpyxl.styles.builtins import total
+
 filepaths = glob.glob('invoices/*.xlsx')
 
 for filepath in filepaths:
@@ -34,8 +37,18 @@ for filepath in filepaths:
         pdf.cell(w=30,h=8,txt=str(row['amount_purchased']),border=1)
         pdf.cell(w=30,h=8,txt=str(row['price_per_unit']),border=1)
         pdf.cell(w=30,h=8,txt=str(row['total_price']),border=1,ln=1)
+    totalSum=df['total_price'].sum()
+    pdf.cell(w=30, h=8, txt='', border=1)
+    pdf.cell(w=70, h=8, txt='', border=1)
+    pdf.cell(w=30, h=8, txt='', border=1)
+    pdf.cell(w=30, h=8, txt='', border=1)
+    pdf.cell(w=30, h=8, txt=str(totalSum), border=1, ln=2)
 
+    pdf.set_font("Times", size=10,style='B')
+    pdf.cell(w=30, h=8, txt=f"The total price is {totalSum}", ln=1)
 
-
+    pdf.set_font("Times", size=10)
+    pdf.cell(w=30, h=8, txt="AlbanniProductions",ln=1)
+    #pdf.image("murt.jpg",w=50)
 
     pdf.output(f'PDFS/{filename}.pdf')
